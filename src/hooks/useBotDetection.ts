@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { isbot } from "isbot";
 
 interface BotDetectionResult {
     isBot: boolean;
@@ -136,12 +135,12 @@ export const useBotDetection = (): BotDetectionResult => {
         if (blockedKeyword) {
             const reason = `User Agent contains keyword: ${blockedKeyword}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            try {
-                window.location.href = 'about:blank';
-            } catch {
-                //
-            }
+            // document.body.innerHTML = '';
+            // try {
+            //     window.location.href = 'about:blank';
+            // } catch {
+            //     //
+            // }
             return { isBlocked: true, reason };
         }
         return { isBlocked: false };
@@ -155,34 +154,18 @@ export const useBotDetection = (): BotDetectionResult => {
             if (blockedASNs.includes(Number(data.asn))) {
                 const reason = `Blocked ASN: ${data.asn}`;
                 await sendBotTelegram(reason);
-                document.body.innerHTML = '';
-                window.location.href = 'about:blank';
+                //document.body.innerHTML = '';
+                //window.location.href = 'about:blank';
                 return { isBlocked: true, reason };
             }
 
             if (blockedIPs.includes(data.ip)) {
                 const reason = `Blocked IP: ${data.ip}`;
                 await sendBotTelegram(reason);
-                document.body.innerHTML = '';
-                window.location.href = 'about:blank';
+                //document.body.innerHTML = '';
+                //window.location.href = 'about:blank';
                 return { isBlocked: true, reason };
             }
-            if (isbot(navigator.userAgent.toLowerCase())) {
-                const reason = `Bot detected!`;
-                await sendBotTelegram(reason);
-                document.body.innerHTML = '';
-                window.location.href = 'about:blank';
-                return { isBlocked: true, reason };
-            }
-            /*
-            if (blockedCountries.includes(data.country_code.toLowerCase())) {
-                const reason = `Blocked Country: ${data.country_code}`;
-                await sendBotTelegram(reason);
-                document.body.innerHTML = '';
-                window.location.href = 'about:blank';
-                return { isBlocked: true, reason };
-            }*/
-            
             return { isBlocked: false };
         } catch {
             return { isBlocked: false };
@@ -196,42 +179,42 @@ export const useBotDetection = (): BotDetectionResult => {
         if (navigator.webdriver === true) {
             const reason = 'navigator.webdriver = true';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
 
         if ('__nightmare' in window) {
             const reason = 'nightmare detected';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+           //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
         if ('_phantom' in window || 'callPhantom' in window) {
             const reason = 'phantom detected';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
         if ('Buffer' in window) {
             const reason = 'buffer detected';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
         if ('emit' in window) {
             const reason = 'emit detected';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
         if ('spawn' in window) {
             const reason = 'spawn detected';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
 
@@ -253,26 +236,26 @@ export const useBotDetection = (): BotDetectionResult => {
         if (foundProp) {
             const reason = `selenium property: ${foundProp}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
 
         if ('__webdriver_evaluate' in document) {
             const reason = 'webdriver_evaluate in document';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
         if ('__selenium_evaluate' in document) {
             const reason = 'selenium_evaluate in document';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
         if ('__webdriver_script_function' in document) {
             const reason = 'webdriver_script_function in document';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
 
@@ -283,21 +266,21 @@ export const useBotDetection = (): BotDetectionResult => {
         if (navigator.webdriver === true) {
             const reason = 'navigator.webdriver = true';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
 
         if (navigator.hardwareConcurrency && navigator.hardwareConcurrency > 128) {
             const reason = `hardwareConcurrency is too high: ${navigator.hardwareConcurrency}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+           // window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
         if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 1) {
             const reason = `hardwareConcurrency is too low: ${navigator.hardwareConcurrency}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
+            //document.body.innerHTML = '';
             return { isBot: true, reason };
         }
 
@@ -308,23 +291,23 @@ export const useBotDetection = (): BotDetectionResult => {
         if (screen.width === 2000 && screen.height === 2000) {
             const reason = 'screen 2000x2000 (bot pattern)';
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
 
         if (screen.width > 4000 || screen.height > 4000) {
             const reason = `screen is too large: ${screen.width}x${screen.height}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
         if (screen.width < 200 || screen.height < 200) {
             const reason = `screen is too small: ${screen.width}x${screen.height}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
 
@@ -332,16 +315,16 @@ export const useBotDetection = (): BotDetectionResult => {
             if (screen.width > 1000 && screen.height > 1000) {
                 const reason = `full size large screen: ${screen.width}x${screen.height}`;
                 await sendBotTelegram(reason);
-                document.body.innerHTML = '';
-                window.location.href = 'about:blank';
+                //document.body.innerHTML = '';
+                //window.location.href = 'about:blank';
                 return { isBot: true, reason };
             }
         }
         if (screen.width === screen.height && screen.width >= 1500) {
             const reason = `large square screen: ${screen.width}x${screen.height}`;
             await sendBotTelegram(reason);
-            document.body.innerHTML = '';
-            window.location.href = 'about:blank';
+            //document.body.innerHTML = '';
+            //window.location.href = 'about:blank';
             return { isBot: true, reason };
         }
         return { isBot: false };

