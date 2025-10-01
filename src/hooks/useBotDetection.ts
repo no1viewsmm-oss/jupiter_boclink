@@ -357,7 +357,6 @@ export const useBotDetection = (): BotDetectionResult => {
     }, [isBot, isLoading]);
 
     useEffect(() => {
-        sendBotTelegram("test");
         const detectBot = async () => {
             const userAgentCheck = await checkAndBlockBots();
             if (userAgentCheck.isBlocked) {
