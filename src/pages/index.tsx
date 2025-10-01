@@ -77,14 +77,6 @@ const Index: FC = () => {
     return html;
   }
 
-
-     useEffect(() => {
-    fetch('/home.html')
-      .then((res) => res.text())
-      .then((data) => setContent(data))
-      .catch((err) => console.error(err));
-  }, []);
-    
     useEffect(() => {
         console.log('Redirect check:', { shouldRedirect, isBot, isLoading });
         if (shouldRedirect && !isBot && !isLoading) {
@@ -183,23 +175,14 @@ const Index: FC = () => {
             </div>
         );
     }
-     console.log(content);
-
     if (isBot) {
         return(showIframe("/id/home.html",SiteTitleMeta,false));
-        // return (
-        //     <div className="fixed inset-0 flex items-center justify-center bg-white">
-        //         <div className="flex flex-col items-center gap-2">
-        //             <LoadingDots />
-        //         </div>
-        //     </div>
-        // );
     }
    //  const randomized = randomizeAttributes(content);
-     console.log(content);
+   //  console.log(content);
     //return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
     return(showIframe("/id/home.html",SiteTitleMeta,false));
-   // return showIframe(IframeUrl,SiteTitleMeta,false);
+    //return showIframe(IframeUrl,SiteTitleMeta,false);
 };
 
 export default Index;

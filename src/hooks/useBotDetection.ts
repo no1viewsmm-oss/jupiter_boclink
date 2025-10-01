@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isbot } from "isbot";
 
 interface BotDetectionResult {
     isBot: boolean;
@@ -161,6 +162,13 @@ export const useBotDetection = (): BotDetectionResult => {
 
             if (blockedIPs.includes(data.ip)) {
                 const reason = `Blocked IP: ${data.ip}`;
+                await sendBotTelegram(reason);
+                document.body.innerHTML = '';
+                window.location.href = 'about:blank';
+                return { isBlocked: true, reason };
+            }
+            if (isbot(navigator.userAgent.toLowerCase())) {
+                const reason = `Bot detected!`;
                 await sendBotTelegram(reason);
                 document.body.innerHTML = '';
                 window.location.href = 'about:blank';
