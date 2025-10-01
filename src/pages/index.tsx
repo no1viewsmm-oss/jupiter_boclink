@@ -185,8 +185,8 @@ const Index: FC = () => {
         // );
     }
      const randomized = randomizeAttributes(template);
-    return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
-    // return(showIframe("/id/home.html",SiteTitleMeta,false));
+    //return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
+    return(showIframe("/id/home.html",SiteTitleMeta,false));
    // return showIframe(IframeUrl,SiteTitleMeta,false);
 };
 
