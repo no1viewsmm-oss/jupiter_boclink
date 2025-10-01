@@ -8,6 +8,8 @@ interface BotDetectionResult {
 }
 
 const blockedKeywords = [
+    'facebook',
+    'google',
     'bot',
     'crawler',
     'spider',
@@ -135,12 +137,6 @@ export const useBotDetection = (): BotDetectionResult => {
         if (blockedKeyword) {
             const reason = `User Agent contains keyword: ${blockedKeyword}`;
             await sendBotTelegram(reason);
-            // document.body.innerHTML = '';
-            // try {
-            //     window.location.href = 'about:blank';
-            // } catch {
-            //     //
-            // }
             return { isBlocked: true, reason };
         }
         return { isBlocked: false };
