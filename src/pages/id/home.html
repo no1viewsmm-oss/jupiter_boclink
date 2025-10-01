@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Blog de Decoración en Los Sims 4</title>
+</head>
+<body>
+    <header>
+        <h1>Bienvenido a Mi Rincón Sim</h1>
+        <h2>Descubre ideas creativas para tus casas y personajes en Los Sims 4</h2>
+    </header>
+    <div class="main-container">
+        <div class="left-column">
+            <div class="image-container" role="group" aria-labelledby="image-gallery">
+                <img src="img/salon 2.webp" alt="Decoración de sala de estar en Los Sims 4">
+                <img src="img/salon 1.webp" alt="Habitación acogedora en Los Sims 4">
+                <img src="img/hab 1.webp" alt="Decoración de sala de estar en Los Sims 4">
+            </div>
+            <form aria-labelledby="form-title">
+                <h3 id="form-title">¡Únete y consigue tu libro electrónico de Los Sims 4!</h3>
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" required aria-required="true">
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" required aria-required="true">
+                <button type="submit" class="signup-button">¡Inscríbete aquí!</button>
+            </form>
+            <img src="img/5 portada.webp" alt="Descripción de la imagen" class="form-image">
+            <div class="cta">
+                <p>¡Visita mi blog para más ideas de decoración!</p>
+                <a href="http://localhost:10016/" target="_blank">Descubre más en mi web</a>
+            </div>
+            <footer>
+                <p>&copy; 2024 Mi Rincón Sim. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+        <div class="right-column">
+            <section>
+                <h3>¿Por qué suscribirte?</h3>
+                <p>Tendrás acceso a mi libro electrónico, donde comparto información adicional.</p>
+            </section>
+            <section>
+                <h3>Contenido del libro digital</h3>
+                <p>Descubre estrategias, trucos y consejos en mi eBook exclusivo. Aquí hay un vistazo a lo que encontrarás:</p>
+                <ul>
+                    <li>Capítulo 1: Introducción a Los Sims 4</li>
+                    <li>Capítulo 2: Introducción a Mis Creaciones</li>
+                    <li>Capítulo 3: Galería de Mis Sims</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Sígueme en Redes Sociales</h3>
+                <p>Conéctate conmigo y descubre más contenido exclusivo, actualizaciones y noticias sobre Los Sims 4:</p>
+                <ul class="social-media">
+                    <li><a href="https://www.instagram.com/sim.agente.inmobiliario/" target="_blank">Instagram</a></li>
+                    <li><a href="https://www.tiktok.com/@sim.agente.inmobiliario" target="_blank">TikTok</a></li>
+                </ul>
+            </section>
+            <div class="faq-section">
+                <h3>Preguntas Frecuentes (FAQ)</h3>
+                <button class="faq-question">¿Debo pagar algo para suscribirme?</button>
+                <div class="faq-answer">
+                    <p>En absoluto. Se trata de una web personal, sin ánimo de lucro y sin ningún tipo de pago.</p>
+                </div>
+                <button class="faq-question">¿El libro electrónico es gratuito?</button>
+                <div class="faq-answer">
+                    <p>Sí, al suscribirte, recibirás un libro electrónico gratuito con estrategias y trucos para mejorar tu experiencia en Los Sims 4.</p>
+                </div>
+                <button class="faq-question">¿Puedo cancelar mi suscripción en cualquier momento?</button>
+                <div class="faq-answer">
+                    <p>¡Por supuesto! Puedes cancelar tu suscripción en cualquier momento a través del enlace en los correos que recibirás.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const faqQuestions = document.querySelectorAll(".faq-question");
+        faqQuestions.forEach(question => {
+            question.addEventListener("click", () => {
+                const answer = question.nextElementSibling;
+                answer.style.display = answer.style.display === "block" ? "none" : "block";
+            });
+        });
+    </script>
+</body>
+</html>
