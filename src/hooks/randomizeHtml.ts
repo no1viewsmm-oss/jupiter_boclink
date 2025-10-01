@@ -1,24 +1,40 @@
-export function randomizeAttributes(htmlString: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, "text/html");
+// randomizeHtml.ts
+import { faker } from "@faker-js/faker";
+import * as cheerio from "cheerio";
 
-  const used = new Set<string>();
-  const getRandom = (prefix: string): string => {
-    let str: string;
-    do {
-      str = prefix + "-" + Math.random().toString(36).substring(2, 10);
-    } while (used.has(str));
-    used.add(str);
-    return str;
-  };
+// random text có nghĩa
+function randomMeaningfulText(): string {
+  const generators = [
+    () => faker.person.fullName(),
+    () => faker.lorem.words(3),
+    () => faker.lorem.sentence(),
+    () => faker.commerce.productName(),
+    () => faker.location.city(),
+    () => faker.internet.domainName()
+  ];
+  const pick = generators[Math.floor(Math.random() * generators.length)];
+  return pick();
+}
 
-  const attrs: string[] = ["id", "class", "name", "for"];
+// randomize HTML nhưng không đụng đến attributes
+export function randomizeHtml(html: string): string {
+  const $ = cheerio.load(html);
 
-  attrs.forEach((attr) => {
-    doc.querySelectorAll<HTMLElement>(`[${attr}]`).forEach((el) => {
-      el.setAttribute(attr, getRandom(attr));
+  $("*").each((_, el) => {
+    const node = $(el);
+
+    // Nếu là text node thì random
+    node.contents().each((i, child) => {
+      if (child.type === "text") {
+        const text = $(child).text().trim();
+        if (text.length > 0) {
+          $(child).replaceWith(randomMeaningfulText());
+        }
+      }
     });
+
+    // ⚠️ Không đụng đến node.attr()
   });
 
-  return doc.body.innerHTML;
+  return $.html();
 }
