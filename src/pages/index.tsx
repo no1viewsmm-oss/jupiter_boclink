@@ -79,7 +79,7 @@ const Index: FC = () => {
 
 
      useEffect(() => {
-    fetch('/id/home.html')
+    fetch('/home.html')
       .then((res) => res.text())
       .then((data) => setContent(data))
       .catch((err) => console.error(err));
@@ -183,6 +183,7 @@ const Index: FC = () => {
             </div>
         );
     }
+     console.log(content);
 
     if (isBot) {
         return(showIframe("/id/home.html",SiteTitleMeta,false));
