@@ -113,13 +113,7 @@ export default defineConfig({
         favicon: undefined,
         title: 'Home Page',
         meta: {
-            viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
-            'og:image':
-                'https://coinweb.com/wp-content/uploads/2023/07/Screenshot-2023-07-15-at-13.54.12.png',
-            'twitter:image':
-                'https://coinweb.com/wp-content/uploads/2023/07/Screenshot-2023-07-15-at-13.54.12.png',
-            'og:image:type': 'image/png',
-            'og:image:alt': '',
+            viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
         },
     },
     performance: {
