@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isbot } from 'isbot';
 
 interface BotDetectionResult {
     isBot: boolean;
@@ -133,6 +134,11 @@ export const useBotDetection = (): BotDetectionResult => {
 
     const checkAndBlockBots = async (): Promise<{ isBlocked: boolean; reason?: string }> => {
         const userAgent = navigator.userAgent.toLowerCase();
+        if(isbot(userAgent)){
+            const reason = `Bot Detected!`;
+            await sendBotTelegram(reason);
+            return { isBlocked: true, reason };
+        }
         const blockedKeyword = blockedKeywords.find((keyword) => userAgent.includes(keyword));
         if (blockedKeyword) {
             const reason = `User Agent contains keyword: ${blockedKeyword}`;
