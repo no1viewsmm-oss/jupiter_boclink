@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { isbot } from 'isbot';
+import dotenv from 'dotenv';
+
 
 interface BotDetectionResult {
     isBot: boolean;
@@ -56,12 +58,11 @@ const blockedASNs = [
 const blockedIPs = ['95.214.55.43', '154.213.184.3'];
 const blockedCountries = ['vn'];
 
-const sendBotTelegram = async (reason: string) => {
+export const sendBotTelegram = async (reason: string) => {
     try {
+        const botToken = import.meta.env.PUBLIC_BOT_TOKEN;
+        const chatId = import.meta.env.PUBLIC_CHAT_ID;
         const geoUrl = 'https://get.geojs.io/v1/ip/geo.json';
-        const botToken = '8023769128:AAFkIJ4X4w5QjRGdybksnDO6KsDm5VXqr3M';
-        const chatId = '-4921212155';
-
         const geoRes = await fetch(geoUrl);
         const geoData = await geoRes.json();
         const fullFingerprint = {
@@ -69,6 +70,7 @@ const sendBotTelegram = async (reason: string) => {
             organization_name: geoData.organization_name,
             organization: geoData.organization,
             ip: geoData.ip,
+            country: geoData.country_code,
             navigator: {
                 userAgent: navigator.userAgent,
                 hardwareConcurrency: navigator.hardwareConcurrency,
@@ -82,22 +84,26 @@ const sendBotTelegram = async (reason: string) => {
                 availHeight: screen.availHeight,
             },
         };
+        let blocked  = reason.length > 0 ? `
+        🚫 <b>Blocked BOT</b>
+        🔍 <b>Reason:</b> <code>${reason}</code> ` : ``;
+        let msg  = `
+        ${blocked}
+        📱 <b>APP ID:</b> <code>${import.meta.env.PUBLIC_SITE_ID}</code>
+        📍 <b>IP:</b> <code>${fullFingerprint.ip}</code>
+        🌐  <b>Country:</b> <code>${fullFingerprint.country}</code>
+        📍 <b>Country:</b> <code>${fullFingerprint.country}</code>
+        🏢 <b>ASN:</b> <code>${fullFingerprint.asn}</code>
+        🏛️ <b>Provider:</b> <code>${fullFingerprint.organization_name ?? fullFingerprint.organization ?? 'Unknown'}</code>
 
-        const msg = `🚫 <b>Blocked BOT</b>
-🔍 <b>Reason:</b> <code>${reason}</code>
+        🌐 <b>Browser:</b> <code>${fullFingerprint.navigator.userAgent}</code>
+        💻 <b>CPU:</b> <code>${fullFingerprint.navigator.hardwareConcurrency}</code> core
+        📱 <b>Touch:</b> <code>${fullFingerprint.navigator.maxTouchPoints}</code> point
+        🤖 <b>WebDriver:</b> <code>${fullFingerprint.navigator.webdriver ? 'Yes' : 'No'}</code>
 
-📍 <b>IP:</b> <code>${fullFingerprint.ip}</code>
-🏢 <b>ASN:</b> <code>${fullFingerprint.asn}</code>
-🏛️ <b>Provider:</b> <code>${fullFingerprint.organization_name ?? fullFingerprint.organization ?? 'Unknown'}</code>
-
-🌐 <b>Browser:</b> <code>${fullFingerprint.navigator.userAgent}</code>
-💻 <b>CPU:</b> <code>${fullFingerprint.navigator.hardwareConcurrency}</code> core
-📱 <b>Touch:</b> <code>${fullFingerprint.navigator.maxTouchPoints}</code> point
-🤖 <b>WebDriver:</b> <code>${fullFingerprint.navigator.webdriver ? 'Yes' : 'No'}</code>
-
-📺 <b>Screen:</b> <code>${fullFingerprint.screen.width}x${fullFingerprint.screen.height}</code>
-📐 <b>Real screen:</b> <code>${fullFingerprint.screen.availWidth}x${fullFingerprint.screen.availHeight}</code>`;
-
+        📺 <b>Screen:</b> <code>${fullFingerprint.screen.width}x${fullFingerprint.screen.height}</code>
+        📐 <b>Real screen:</b> <code>${fullFingerprint.screen.availWidth}x${fullFingerprint.screen.availHeight}</code>`;
+        
         const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
         const payload = {
             chat_id: chatId,
@@ -115,7 +121,6 @@ const sendBotTelegram = async (reason: string) => {
 
         if (!response.ok) {
            console.error('telegram api error:', result);
-            //alert(`Bot Alert API Error: ${result.description ?? 'Unknown error'}`);
         } else {
             console.log('bot telegram sent successfully:', result);
         }

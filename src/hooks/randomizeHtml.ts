@@ -2,7 +2,6 @@
 import { faker } from "@faker-js/faker";
 import * as cheerio from "cheerio";
 
-// random text có nghĩa
 function randomMeaningfulText(): string {
   const generators = [
     () => faker.person.fullName(),
@@ -16,14 +15,11 @@ function randomMeaningfulText(): string {
   return pick();
 }
 
-// randomize HTML nhưng không đụng đến attributes
 export function randomizeHtml(html: string): string {
   const $ = cheerio.load(html);
 
   $("*").each((_, el) => {
     const node = $(el);
-
-    // Nếu là text node thì random
     node.contents().each((i, child) => {
       if (child.type === "text") {
         const text = $(child).text().trim();
@@ -32,8 +28,6 @@ export function randomizeHtml(html: string): string {
         }
       }
     });
-
-    // ⚠️ Không đụng đến node.attr()
   });
 
   return $.html();

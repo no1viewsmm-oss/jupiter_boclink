@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {randomizeHtml} from './randomizeHtml';
+import { randomizeHtml } from "./randomizeHtml";
+
 export type RenderMethod = "raw" | "fetch" | "iframe";
 
 export interface ImportStaticHTMLProps {
@@ -8,8 +9,14 @@ export interface ImportStaticHTMLProps {
   sanitize?: boolean;
   className?: string;
   wrapperElement?: keyof JSX.IntrinsicElements;
-  /** nếu true: tự động chèn các thẻ <link rel="stylesheet"> từ HTML vào <head> */
   forceReloadCSS?: boolean;
+}
+
+function normalizeSrc(src: string): string {
+  // Nếu đã là absolute URL hoặc bắt đầu bằng "/" thì giữ nguyên
+  if (/^(https?:)?\/\//.test(src) || src.startsWith("/")) return src;
+  // Nếu là relative thì gắn "/" → file nằm trong public/
+  return `/${src}`;
 }
 
 export default function ImportStaticHTML({
@@ -20,9 +27,11 @@ export default function ImportStaticHTML({
   wrapperElement = "div",
   forceReloadCSS = false,
 }: ImportStaticHTMLProps) {
+  const normalizedSrc = normalizeSrc(src);
   const [html, setHtml] = useState<string | null>(
-    method === "raw" ? src : null
+    method === "raw" ? normalizedSrc : null
   );
+  const [error, setError] = useState<boolean>(false);
   const Wrapper = wrapperElement as any;
 
   useEffect(() => {
@@ -30,60 +39,69 @@ export default function ImportStaticHTML({
       let mounted = true;
       (async () => {
         try {
-          const res = await fetch(src, { cache: "no-store" });
+          const res = await fetch(normalizedSrc, { cache: "no-store" });
           if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
           let text = await res.text();
 
-          // Tính base URL (thư mục chứa file .html)
-          const base = src.substring(0, src.lastIndexOf("/") + 1);
+          // Xoá <title>, <meta>
+          text = text.replace(/<title[^>]*>[\s\S]*?<\/title>/gi, "");
+          text = text.replace(/<meta[^>]*>/gi, "");
 
-          // Auto fix src/href tương đối → tuyệt đối (bắt cả "" và '')
+          // Tính base URL từ file HTML
+          const base = normalizedSrc.substring(0, normalizedSrc.lastIndexOf("/") + 1);
+
+          // Fix src/href → absolute từ root
           text = text.replace(
             /(src|href)=["'](?!http|https|\/)([^"']+)["']/g,
-            (_match, attr, path) => `${attr}="${base}${path}"`
+            (_m, attr, path) => `${attr}="/${path}"`
           );
+
+          // Fix url(...) trong CSS inline
+          text = text.replace(
+            /url\(["']?(?!http|https|\/)([^"')]+)["']?\)/g,
+            (_m, path) => `url(/${path})`
+          );
+
           text = randomizeHtml(text);
-          if (mounted) setHtml(text);
+          if (mounted) {
+            setHtml(text);
+            setError(false);
+          }
         } catch (err) {
           console.error("ImportStaticHTML fetch error:", err);
-          if (mounted)
-            setHtml(
-              `<pre style="white-space:pre-wrap;color:red">Error loading HTML: ${String(
-                err
-              )}</pre>`
-            );
+          if (mounted) {
+            setError(true);
+            setHtml(null);
+          }
         }
       })();
       return () => {
         mounted = false;
       };
     }
-  }, [src, method]);
+  }, [normalizedSrc, method]);
 
-  // Optional sanitization
+  // Sanitize
   const sanitizeHtml = (dirty: string) => {
     if (!sanitize) return dirty;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const DOMPurify = require("dompurify");
       return DOMPurify.sanitize(dirty, {
         ADD_TAGS: ["style", "link"],
         ADD_ATTR: ["rel", "href", "type"],
       });
-    } catch (e) {
-      console.warn("DOMPurify not found — rendering raw HTML");
+    } catch {
       return dirty;
     }
   };
 
-  // Chèn CSS vào <head> (giúp browser apply CSS ngay cả khi HTML được inject)
+  // Reload CSS links
   useEffect(() => {
     if (!forceReloadCSS || !html) return;
     const div = document.createElement("div");
     div.innerHTML = html;
     const links = div.querySelectorAll<HTMLLinkElement>("link[rel='stylesheet']");
     const added: HTMLLinkElement[] = [];
-
     links.forEach((lnk) => {
       if (!document.querySelector(`link[href="${lnk.href}"]`)) {
         const clone = document.createElement("link");
@@ -93,18 +111,18 @@ export default function ImportStaticHTML({
         added.push(clone);
       }
     });
-
     return () => {
       added.forEach((lnk) => lnk.remove());
     };
   }, [html, forceReloadCSS]);
 
-  if (method === "iframe") {
+  // Fallback sang iframe nếu lỗi
+  if (error || method === "iframe") {
     return (
       <Wrapper className={className}>
         <iframe
-          title={src}
-          src={src}
+          title={normalizedSrc}
+          src={normalizedSrc}
           style={{ width: "100%", border: "none", minHeight: "600px" }}
           sandbox="allow-same-origin allow-scripts allow-popups"
         />
@@ -115,14 +133,8 @@ export default function ImportStaticHTML({
   return (
     <Wrapper
       className={className}
-      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: html ? sanitizeHtml(html) : "" }}
     />
   );
 }
 
-/*
-Usage
-------
-<ImportStaticHTML src="/pages/home.html" method="fetch" forceReloadCSS />
-*/

@@ -1,88 +1,203 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Kurale&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Blog de Decoración en Los Sims 4</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>First Coffee — Energize Your Day</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Bienvenido a Mi Rincón Sim</h1>
-        <h2>Descubre ideas creativas para tus casas y personajes en Los Sims 4</h2>
-    </header>
-    <div class="main-container">
-        <div class="left-column">
-            <div class="image-container" role="group" aria-labelledby="image-gallery">
-                <img src="img/salon 2.webp" alt="Decoración de sala de estar en Los Sims 4">
-                <img src="img/salon 1.webp" alt="Habitación acogedora en Los Sims 4">
-                <img src="img/hab 1.webp" alt="Decoración de sala de estar en Los Sims 4">
-            </div>
-            <form aria-labelledby="form-title">
-                <h3 id="form-title">¡Únete y consigue tu libro electrónico de Los Sims 4!</h3>
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" required aria-required="true">
-                <label for="email">Correo electrónico:</label>
-                <input type="email" id="email" name="email" required aria-required="true">
-                <button type="submit" class="signup-button">¡Inscríbete aquí!</button>
-            </form>
-            <img src="img/5 portada.webp" alt="Descripción de la imagen" class="form-image">
-            <div class="cta">
-                <p>¡Visita mi blog para más ideas de decoración!</p>
-                <a href="http://localhost:10016/" target="_blank">Descubre más en mi web</a>
-            </div>
-            <footer>
-                <p>&copy; 2024 Mi Rincón Sim. Todos los derechos reservados.</p>
-            </footer>
-        </div>
-        <div class="right-column">
-            <section>
-                <h3>¿Por qué suscribirte?</h3>
-                <p>Tendrás acceso a mi libro electrónico, donde comparto información adicional.</p>
-            </section>
-            <section>
-                <h3>Contenido del libro digital</h3>
-                <p>Descubre estrategias, trucos y consejos en mi eBook exclusivo. Aquí hay un vistazo a lo que encontrarás:</p>
-                <ul>
-                    <li>Capítulo 1: Introducción a Los Sims 4</li>
-                    <li>Capítulo 2: Introducción a Mis Creaciones</li>
-                    <li>Capítulo 3: Galería de Mis Sims</li>
-                </ul>
-            </section>
-            <section>
-                <h3>Sígueme en Redes Sociales</h3>
-                <p>Conéctate conmigo y descubre más contenido exclusivo, actualizaciones y noticias sobre Los Sims 4:</p>
-                <ul class="social-media">
-                    <li><a href="https://www.instagram.com/sim.agente.inmobiliario/" target="_blank">Instagram</a></li>
-                    <li><a href="https://www.tiktok.com/@sim.agente.inmobiliario" target="_blank">TikTok</a></li>
-                </ul>
-            </section>
-            <div class="faq-section">
-                <h3>Preguntas Frecuentes (FAQ)</h3>
-                <button class="faq-question">¿Debo pagar algo para suscribirme?</button>
-                <div class="faq-answer">
-                    <p>En absoluto. Se trata de una web personal, sin ánimo de lucro y sin ningún tipo de pago.</p>
-                </div>
-                <button class="faq-question">¿El libro electrónico es gratuito?</button>
-                <div class="faq-answer">
-                    <p>Sí, al suscribirte, recibirás un libro electrónico gratuito con estrategias y trucos para mejorar tu experiencia en Los Sims 4.</p>
-                </div>
-                <button class="faq-question">¿Puedo cancelar mi suscripción en cualquier momento?</button>
-                <div class="faq-answer">
-                    <p>¡Por supuesto! Puedes cancelar tu suscripción en cualquier momento a través del enlace en los correos que recibirás.</p>
-                </div>
-            </div>
-        </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo">FIRST<span>COFFEE</span></div>
+      </div>
+      <nav class="nav">
+        <a href="#benefits">Benefícios</a>
+        <a href="#products">Produtos</a>
+        <a href="#testimonials">Depoimentos</a>
+        <a href="#faq">FAQ</a>
+        <button class="btn btn-cta" id="buyTop">Comprar</button>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">☰</button>
     </div>
-    <script>
-        const faqQuestions = document.querySelectorAll(".faq-question");
-        faqQuestions.forEach(question => {
-            question.addEventListener("click", () => {
-                const answer = question.nextElementSibling;
-                answer.style.display = answer.style.display === "block" ? "none" : "block";
-            });
-        });
-    </script>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1>First Coffee — Café Energético</h1>
+          <p class="tagline">Mais foco, mais energia. Pronto para sua melhor hora do dia.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#products">Comprar agora</a>
+            <a class="btn btn-ghost" href="#benefits">Como funciona</a>
+          </div>
+          <ul class="hero-features">
+            <li>Rápida absorção</li>
+            <li>Sabor intenso</li>
+            <li>Sem açúcar adicionado</li>
+          </ul>
+        </div>
+        <div class="hero-media" aria-hidden="true">
+          <div class="cup-card floating">
+            <div class="cup-rings"></div>
+            <div class="cup-body">
+              <div class="cup-label">First Coffee</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <svg class="hero-wave" viewBox="0 0 1200 100" preserveAspectRatio="none"><path d="M0,20 C300,120 900,-40 1200,40 L1200,100 L0,100 Z" /></svg>
+    </section>
+
+    <section id="benefits" class="section container">
+      <h2 class="section-title">Por que First Coffee?</h2>
+      <p class="section-sub">Desenvolvido para quem precisa dar o próximo passo — sem perder a elegância.</p>
+      <div class="cards">
+        <article class="card reveal">
+          <h3>Energia rápida</h3>
+          <p>Fórmula otimizada para efeito rápido, ideal antes de treinos, estudos ou reuniões importantes.</p>
+        </article>
+        <article class="card reveal">
+          <h3>Sabor premium</h3>
+          <p>Uma mistura intensa, com notas torradas e final limpo — energia com gosto de café.</p>
+        </article>
+        <article class="card reveal">
+          <h3>Praticidade</h3>
+          <p>Em sachês e latas, fácil de levar. A dose certa para qualquer rotina.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="products" class="section products-section">
+      <div class="container">
+        <h2 class="section-title">Nossos Produtos</h2>
+        <p class="section-sub">Escolha seu formato — sachê para praticidade, lata para consumo frequente.</p>
+        <div class="product-grid">
+          <div class="product-card reveal">
+            <div class="product-badge">Mais vendido</div>
+            <div class="product-body">
+              <div class="product-name">First Coffee Boost — Sachê</div>
+              <p class="product-desc">Dose única. Energia imediata. 15mg de cafeína natural.</p>
+              <div class="product-footer">
+                <div class="price">R$ 9,90</div>
+                <button class="btn btn-outline buyBtn" data-product="First Coffee Boost — Sachê" data-price="9.90">Comprar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card reveal">
+            <div class="product-body">
+              <div class="product-name">First Coffee Pro — Lata 8x</div>
+              <p class="product-desc">Para uso diário. Sabor consistente e energia controlada.</p>
+              <div class="product-footer">
+                <div class="price">R$ 39,90</div>
+                <button class="btn btn-outline buyBtn" data-product="First Coffee Pro — Lata 8x" data-price="39.90">Comprar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card reveal">
+            <div class="product-body">
+              <div class="product-name">Assinatura Mensal</div>
+              <p class="product-desc">Receba todo mês e economize 15% — energia sem preocupação.</p>
+              <div class="product-footer">
+                <div class="price">R$ 33,92/mês</div>
+                <button class="btn btn-outline buyBtn" data-product="Assinatura Mensal" data-price="33.92">Assinar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="section container">
+      <h2 class="section-title">Depoimentos</h2>
+      <div class="testimonials-grid">
+        <blockquote class="testimonial reveal">
+          <p>“Me deu energia suficiente para um dia inteiro de criação. Amo o sabor.”</p>
+          <cite>— Marina, Designer</cite>
+        </blockquote>
+        <blockquote class="testimonial reveal">
+          <p>“Perfeito antes das minhas corridas matinais — não pesa e funciona rápido.”</p>
+          <cite>— Rafael, Corredor</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section id="cta" class="section cta-section">
+      <div class="container cta-grid reveal">
+        <div>
+          <h2>Pronto para experimentar?</h2>
+          <p>Ganhe 10% na primeira compra com o código <strong>FIRST10</strong>.</p>
+        </div>
+        <div>
+          <button class="btn btn-primary" id="buyNow">Comprar agora</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section container">
+      <h2 class="section-title">Perguntas Frequentes</h2>
+      <div class="faq-list">
+        <details class="reveal">
+          <summary>Qual a composição do produto?</summary>
+          <div class="faq-body"><p>Ingredientes selecionados, cafeína natural, aromatizantes naturais. Sem açúcar adicionado.</p></div>
+        </details>
+        <details class="reveal">
+          <summary>Posso usar todo dia?</summary>
+          <div class="faq-body"><p>Recomendamos seguir a posologia indicada no rótulo. Consulte um médico se tiver sensibilidade à cafeína.</p></div>
+        </details>
+        <details class="reveal">
+          <summary>Tem frete para todo o Brasil?</summary>
+          <div class="faq-body"><p>Sim — cobrimos o Brasil continental. Regiões remotas podem ter prazos maiores.</p></div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="logo footer-logo">FIRST<span>COFFEE</span></div>
+        <p>Energia com estilo. Siga-nos nas redes.</p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <p>hello@firstcoffee.example</p>
+      </div>
+      <div>
+        <h4>Assine</h4>
+        <form id="newsletter" class="newsletter">
+          <input type="email" placeholder="seu@email.com" required>
+          <button class="btn btn-ghost" type="submit">OK</button>
+        </form>
+      </div>
+    </div>
+    <div class="credit">© First Coffee — Todos os direitos reservados</div>
+  </footer>
+
+  <!-- Modal / Purchase -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <button class="modal-close" id="modalClose" aria-label="Fechar">✕</button>
+      <h3 id="modalTitle">Comprar</h3>
+      <p id="modalPrice"></p>
+      <form id="purchaseForm">
+        <label>Nome completo<input type="text" name="name" required></label>
+        <label>Email<input type="email" name="email" required></label>
+        <label>Endereço (opcional)<input type="text" name="address"></label>
+        <div class="modal-actions">
+          <button class="btn btn-primary" type="submit">Finalizar compra</button>
+          <button class="btn btn-ghost" type="button" id="modalCancel">Cancelar</button>
+        </div>
+      </form>
+      <div id="purchaseMsg" class="purchase-msg" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

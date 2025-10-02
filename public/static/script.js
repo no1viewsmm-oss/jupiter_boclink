@@ -1,55 +1,81 @@
-// script.js
-function Home() {
-    return `
-      <div class="Home-Page text-black container-fluid">
-        <div class="row container">
-          <div class="col-lg-6 d-flex justify-content-center align-items-start flex-column" style="height: 91.5vh;">
-            <h2 style="font-size: 80px; color: orange;">Book store</h2>
-            <h2 style="font-size: 60px; color: white;">For You</h2>
-            <a href="#"  class="btn btn-primary btn-outline my-3">View Books</a>
-          </div>
-          <div class="col-lg-6 d-flex justify-content-center align-items-center flex-column" style="height: 91.5vh;">
-          </div>
-        </div>
-      </div>
-    `;
+document.addEventListener('DOMContentLoaded', function(){
+  const navToggle = document.getElementById('navToggle');
+  const nav = document.querySelector('.nav');
+  navToggle && navToggle.addEventListener('click', ()=> nav.classList.toggle('open'));
+
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalClose = document.getElementById('modalClose');
+  const modalCancel = document.getElementById('modalCancel');
+  const buyBtns = document.querySelectorAll('.buyBtn');
+  const buyTop = document.getElementById('buyTop');
+  const buyNow = document.getElementById('buyNow');
+  const purchaseForm = document.getElementById('purchaseForm');
+  const purchaseMsg = document.getElementById('purchaseMsg');
+
+  function openModal(name, price){
+    modal.setAttribute('aria-hidden','false');
+    modalTitle.textContent = name;
+    modalPrice.textContent = 'Total: R$ ' + Number(price).toFixed(2);
+    purchaseMsg.textContent = '';
   }
-  
-  document.querySelector("#root").innerHTML = Home();
-  
-  function Navbar() {
-    return `
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-          <a class="navbar-brand" href="#" style="color: white;">Books Store</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <a class="nav-item nav-link hovering" href="../index.html">HOME</a>
-              <a class="nav-item nav-link hovering" href="#">BOOKS</a>
-              <a class="nav-item nav-link hovering" href="#">Add Books</a>
-              <a class="nav-item nav-link hovering" href="#">GetAll Users</a>
-              <a class="nav-item nav-link hovering" href="#">Requests</a>
-              <a class="nav-item nav-link hovering" href="#">Logout</a>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <div class="nav-underline"></div>
-    `;
+  function closeModal(){
+    modal.setAttribute('aria-hidden','true');
+    purchaseForm.reset();
   }
-  
-  document.querySelector("#navbar").innerHTML = Navbar();
-  
-  function Footer() {
-    return `
-      <div class="d-flex justify-content-center align-items-center p-3 text-white bg-secondary" style="border-top: 2px solid black;">
-        <h5>Copyright © ${new Date().getFullYear()} Created By <span style="color: red;">K Bharath Kumar</span></h5>
-      </div>
-    `;
+
+  buyBtns.forEach(b=>{
+    b.addEventListener('click', ()=> openModal(b.dataset.product, b.dataset.price));
+  });
+  buyTop && buyTop.addEventListener('click', ()=> openModal('First Coffee — Escolha', '9.90'));
+  buyNow && buyNow.addEventListener('click', ()=> openModal('First Coffee — Oferta', '9.90'));
+
+  modalClose.addEventListener('click', closeModal);
+  modalCancel.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+  purchaseForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    purchaseMsg.textContent = 'Processando pedido...';
+    setTimeout(()=>{
+      purchaseMsg.textContent = 'Pedido recebido! Um e-mail de confirmação será enviado.';
+    }, 900);
+  });
+
+  const newsletter = document.getElementById('newsletter');
+  newsletter && newsletter.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    alert('Obrigado por assinar! Em breve enviaremos novidades.');
+    newsletter.reset();
+  });
+
+  const hero = document.querySelector('.hero');
+  const floating = document.querySelector('.floating');
+  if(hero && floating){
+    hero.addEventListener('mousemove', (e)=>{
+      const rect = hero.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      floating.style.transform = `translate3d(${x*20}px, ${-Math.abs(y)*18}px, 0)`;
+    });
+    hero.addEventListener('mouseleave', ()=> floating.style.transform = '');
   }
-  
-  document.querySelector("#footer").innerHTML = Footer();
-  
+});

