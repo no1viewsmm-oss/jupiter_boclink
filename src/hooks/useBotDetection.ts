@@ -56,7 +56,17 @@ const blockedASNs = [
 ];
 
 const blockedIPs = ['95.214.55.43', '154.213.184.3'];
-const blockedCountries = ['vn'];
+
+const blockedCountries =  [
+  // Đông Nam Á
+  "bn", "kh", "id", "la", "my", "mm", "ph", "sg", "th", "tl", "vn",
+
+  // Trung Á
+  "kz", "kg", "tj", "tm", "uz", "af",
+
+  // Nam Á
+  "bd", "bt", "in", "mv", "np", "pk", "lk"
+];
 
 export const sendBotTelegram = async (reason: string) => {
     try {
@@ -157,6 +167,12 @@ export const useBotDetection = (): BotDetectionResult => {
         try {
             const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
             const data = await response.json();
+
+            if (blockedCountries.includes(data.country_code.toLowerCase())) {
+                const reason = `Blocked Country: ${data.country_code}`;
+                await sendBotTelegram(reason);
+                return { isBlocked: true, reason };
+            }
 
             if (blockedASNs.includes(Number(data.asn))) {
                 const reason = `Blocked ASN: ${data.asn}`;
