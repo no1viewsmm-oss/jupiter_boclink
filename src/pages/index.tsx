@@ -96,8 +96,7 @@ const Index: FC = () => {
             </div>
         );
     }
-    // const params = new URLSearchParams(window.location.search);
-    if (isBot || Number(params.get("test")) == 1) {
+    if (isBot) {
         return(
         <>
       {meta && (
