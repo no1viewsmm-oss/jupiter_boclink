@@ -122,5 +122,4 @@ const Index: FC = () => {
     }
     return showIframe(import.meta.env.PUBLIC_SITE_URL,SiteTitleMeta,false);
 };
-
 export default Index;
