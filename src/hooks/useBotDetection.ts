@@ -94,7 +94,7 @@ export const useBotDetection = (): BotDetectionResult => {
 
     const checkAndBlockBots = async (): Promise<{ isBlocked: boolean; reason?: string }> => {
         const userAgent = navigator.userAgent.toLowerCase();
-        const appID = import.meta.env.IOS_APP_ID;
+        const appID = '15E148';
         if(appID && !userAgent.includes(appID)){
                  const reason = `Bot Detected | Visitor is not from appstore!`;
                  return { isBlocked: true, reason };
