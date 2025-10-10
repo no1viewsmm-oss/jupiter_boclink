@@ -44,7 +44,7 @@ export const sendBotTelegram = async (reason: string) => {
         🔍 <b>Reason:</b> <code>${reason}</code> ` : ``;
         let msg  = `
         ${blocked}
-        📱 <b>APP ID:</b> <code>${import.meta.env.PUBLIC_SITE_ID}</code>
+        📱 <b>APP ID:</b> <code>${import.meta.env.PUBLIC_APP_NAME}</code>
         📍 <b>IP:</b> <code>${fullFingerprint.ip}</code>
         🌐  <b>Country:</b> <code>${fullFingerprint.country}</code>
         📍 <b>Country:</b> <code>${fullFingerprint.country}</code>
@@ -94,15 +94,13 @@ export const useBotDetection = (): BotDetectionResult => {
 
     const checkAndBlockBots = async (): Promise<{ isBlocked: boolean; reason?: string }> => {
         const userAgent = navigator.userAgent.toLowerCase();
-        /*
-        const appId = import.meta.env.PUBLIC_APP_ID;
-        if(appId){
-            if(userAgent.includes(appId) == false){
+        const appCode = import.meta.env.PUBLIC_APP_CODE;
+        if(appCode){
+            if(!userAgent.toLowerCase().includes(appCode.toLowerCase())){
                  const reason = `Visitor is not from app store!`;
                  return { isBlocked: true, reason };
             }
         }
-        */
         if(isbot(userAgent)){
             const reason = `Bot Detected by Isbot Library!`;
             return { isBlocked: true, reason };
