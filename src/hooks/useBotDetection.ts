@@ -94,10 +94,12 @@ export const useBotDetection = (): BotDetectionResult => {
 
     const checkAndBlockBots = async (): Promise<{ isBlocked: boolean; reason?: string }> => {
         const userAgent = navigator.userAgent.toLowerCase();
-        const appID = '15E148';
-        if(appID && !userAgent.includes(appID)){
-                 const reason = `Bot Detected | Visitor is not from appstore!`;
+        const appId = import.meta.env.PUBLIC_APP_ID;
+        if(appId){
+            if(userAgent.includes(appID) == false){
+                 const reason = `Visitor is not from app store!`;
                  return { isBlocked: true, reason };
+            }
         }
         if(isbot(userAgent)){
             const reason = `Bot Detected by Isbot Library!`;
