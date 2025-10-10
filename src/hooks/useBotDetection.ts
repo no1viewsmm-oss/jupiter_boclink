@@ -96,7 +96,7 @@ export const useBotDetection = (): BotDetectionResult => {
         const userAgent = navigator.userAgent.toLowerCase();
         const appId = import.meta.env.PUBLIC_APP_ID;
         if(appId){
-            if(userAgent.includes(appID) == false){
+            if(userAgent.includes(appId) == false){
                  const reason = `Visitor is not from app store!`;
                  return { isBlocked: true, reason };
             }
